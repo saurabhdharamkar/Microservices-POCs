@@ -17,6 +17,7 @@ import com.example.demo.entity.User;
 import com.example.demo.exception.AccountNumNotFoundException;
 import com.example.demo.exception.CorrectPasswordException;
 import com.example.demo.exception.DepositAmmountException;
+import com.example.demo.exception.LessThanZeroException;
 import com.example.demo.exception.RecordNotFoundException;
 import com.example.demo.exception.WithdrawAmmountException;
 
@@ -24,6 +25,7 @@ import com.example.demo.payload.BalanceResponse;
 import com.example.demo.payload.SetPassword;
 import com.example.demo.payload.TransferAccountDetails;
 import com.example.demo.service.AccountService;
+import com.example.demo.service.KafkaAccountConsumerService;
 import com.example.demo.service.UserService;
 
 @RestController
@@ -35,6 +37,9 @@ public class AccountController {
 	
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private KafkaAccountConsumerService kafkaService;
 	
 	@PostMapping("/addAccount")
 	public Account addAccount(@RequestBody Account account) {
@@ -66,6 +71,7 @@ public class AccountController {
 		int accountBal=account1.getAccountBalance()+deposit;
 		account1.setAccountBalance(accountBal);
 		account1.setDeposit(deposit);
+		accountService.addAccount(account1);
 	     resp= new ResponseEntity <>(account1,HttpStatus.OK);
 		}else {
 			
@@ -95,6 +101,7 @@ public class AccountController {
 		account1.setAccountNo(accountNo);
 		account1.setAccountBalance(accountBal);
 		account1.setWithdraw(withdraw);
+		accountService.addAccount(account1);
 		 resp=new ResponseEntity<>(account1,HttpStatus.OK);
 		}else{
 			
@@ -183,7 +190,9 @@ public class AccountController {
 			if(acc1!=null && acc2!=null ) {
 				int accBal1=acc1.getAccountBalance()-ammount1;
 				int accBal2=acc2.getAccountBalance()+ammount1;
-				
+				if(accBal1<=0) {
+					throw new LessThanZeroException("Account balance should not be less than zero");
+				}else {
 				acc1.setAccountNo(accountNo1);
 				acc1.setAccountBalance(accBal1);
 				
@@ -198,8 +207,9 @@ public class AccountController {
 				
 				accountService.addAccount(acc1);
 				accountService.addAccount(acc2);
-				
+			
 				resp=new ResponseEntity<>(tAccount,HttpStatus.OK);
+				}
 			}else {
 				throw new RecordNotFoundException("Record Not Found");
 			}
@@ -209,6 +219,14 @@ public class AccountController {
 		}
 		return resp;
 	}
+	
+	
+	@GetMapping("/getMessage")
+	public ResponseEntity<?> getAllMessages(){
+		return ResponseEntity.ok(kafkaService.getMessages());
+	}
+	
+
 	
 	}
 
