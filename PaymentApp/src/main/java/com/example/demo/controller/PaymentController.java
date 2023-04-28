@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.controller;
 
 import java.util.List;
 
@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import com.example.demo.BalanceResponse;
+import com.example.demo.TransferAccountDetails;
 import com.example.demo.entity.Account;
 import com.example.demo.entity.User;
 import com.example.demo.service.KafkaProducerService;
