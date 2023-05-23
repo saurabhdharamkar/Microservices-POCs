@@ -41,9 +41,15 @@ public class AccountController {
 	@Autowired
 	private KafkaAccountConsumerService kafkaService;
 	
+//	@PostMapping("/addAccount")
+//	public Account addAccount(@RequestBody Account account) {
+//		return accountService.addAccount(account);
+//	}
 	@PostMapping("/addAccount")
-	public Account addAccount(@RequestBody Account account) {
-		return accountService.addAccount(account);
+	public ResponseEntity<Account> addAccount(@RequestBody Account account){
+		ResponseEntity<Account> resp=null;
+		Account acc=accountService.addAccount(account);
+		return resp=new ResponseEntity<>(acc, HttpStatus.OK);
 	}
 	
 	@GetMapping("/getAccount/{accountNo}")
