@@ -1,0 +1,7 @@
+server:
+  port: 9901
+spring:
+  application:
+    name: TICKET-SERVICE
+    
+#it 
