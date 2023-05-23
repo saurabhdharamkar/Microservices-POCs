@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @SpringBootApplication
-@RestController
-@RequestMapping("/product")
 @EnableCaching
 public class RedisCacheApplication {
 
