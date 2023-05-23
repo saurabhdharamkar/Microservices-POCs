@@ -1,6 +1,7 @@
 package com.neo.lambda;
 
 
+@FunctionalInterface
 interface Product1{
 	void m1();
 }
@@ -17,10 +18,10 @@ public class FunctioonalInterface {
 	
 	public static void main(String[] args) {
 		
-		Product pro=FunctioonalInterface::m1;
+		Product1 pro=FunctioonalInterface::m1;
 		pro.m1();
 		FunctioonalInterface fi=new FunctioonalInterface();
-		Product pro1=fi::m2;
+		Product1 pro1=fi::m2;
 		pro1.m1();
 		
 	}
