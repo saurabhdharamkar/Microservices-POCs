@@ -13,14 +13,14 @@ public class ProductDao {
     public static final String HASH_KEY = "Product";
 
     @Autowired
-    private RedisTemplate template;
+    private RedisTemplate<String,Object> template;
 
     public Product save(Product product){
-        template.opsForHash().put(HASH_KEY,product.getId(),product);
+        template.opsForHash().put(HASH_KEY,product.getId(),product);	
         return product;
     }
 
-    public List<Product> findAll(){
+    public List<Object> findAll(){
         return template.opsForHash().values(HASH_KEY);
     }
 

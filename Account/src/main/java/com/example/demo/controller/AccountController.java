@@ -168,7 +168,7 @@ public class AccountController {
 					pass.setPassword(password);
 					pass.setMsg("Password Set Successfully");
 					accountService.addAccount(acc);
-					resp= new ResponseEntity<SetPassword>(pass,HttpStatus.OK);
+					return resp= new ResponseEntity<SetPassword>(pass,HttpStatus.OK);
 				}else {
 					pass.setMsg("username does not match");
 				}

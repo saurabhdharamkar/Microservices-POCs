@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,20 +29,27 @@ public class ProductController {
     public Product save(@RequestBody Product product) {
         return dao.save(product);
     }
+    
+    @PostMapping("/updateProduct/{id}")
+    @CachePut(key = "#id",cacheNames  = "Product")
+    public Product save(@RequestBody Product product ,@PathVariable int id) {
+    	product.setId(id);
+        return dao.save(product);
+    }
 
     @GetMapping("/getAllProducts")
-    public List<Product> getAllProducts() {
+    public List<?> getAllProducts() {
         return dao.findAll();
     }
 
     @GetMapping("/{id}")
-    @Cacheable(key = "#id",value = "Product")
+    @Cacheable(key = "#id",cacheNames  = "Product")
     public Product findProduct(@PathVariable int id) {
         return dao.findProductById(id);
     }
 
     @DeleteMapping("/{id}")
-    @CacheEvict(key = "#id",value = "Product")
+    @CacheEvict(key = "#id",cacheNames = "Product")
     public String remove(@PathVariable int id) {
         return dao.deleteProduct(id);
     }
