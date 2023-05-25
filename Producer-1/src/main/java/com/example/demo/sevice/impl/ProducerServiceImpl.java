@@ -10,7 +10,7 @@ public class ProducerServiceImpl implements ProducerService{
 	@Override
 	public String produceMessage(String msg) {
 		
-		return "Hello "+msg;
+		return "Hello "+msg+" How are you";
 	}
 
 }
